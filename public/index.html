@@ -1,31 +1,110 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🥀🌺Destiny Nicole's AI Chat🌻🐎</title>
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Destiny Nicole's AI Chat</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Streaming numbers at the top -->
-  <div id="stream" class="stream"></div>
+<canvas id="beach"></canvas>
 
-  <!-- Ocean floating animals -->
-  <div class="floating dolphin">🐬</div>
-  <div class="floating turtle">🐢</div>
-  <div class="floating fish">🐟</div>
-  <div class="floating clownfish">🐠</div>
+<header>
+  <h1>Destiny Nicole's AI Chat</h1>
+  <p>Powered by Pick of Gods AI Engine</p>
+</header>
 
-  <!-- Chat container -->
-  <div id="chat-container">
-    <h1 class="title">🌊 Destiny Nicole's AI Chat🐣</h1>
-    <div id="chat-box"></div>
-    <div id="input-container">
-      <input id="user-input" type="text" placeholder="Type your message..."/>
-      <button id="send-btn">Send🐶</button>
+<div class="chat-container">
+  <div id="chat-messages" class="chat-messages">
+    <div class="message assistant-message">
+      <p>Hey There! I'm Destiny Nicole's AI. How can I assist you today?</p>
     </div>
   </div>
 
-  <script src="chat.js"></script>
+  <div class="typing-indicator" id="typing-indicator">One second Honey...<span class="dots">...</span></div>
+
+  <div class="message-input">
+    <textarea id="user-input" placeholder="**__Type message here...__**" rows="1" autofocus></textarea>
+    <button id="send-button">Send</button>
+  </div>
+</div>
+
+<footer>
+  <p>Destiny Nicole's AI Chat &copy; 2025</p>
+</footer>
+
+<script src="chat.js"></script>
+<script>
+// Beach + Ocean Life Animation
+const canvas = document.getElementById('beach');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+// Sand creatures
+const sandCreatures = [];
+for(let i=0; i<50; i++){
+  sandCreatures.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height*0.3 + canvas.height*0.65,
+    emoji: ['🦀','🐚','🦑','🐌'][Math.floor(Math.random()*4)],
+    speedX: Math.random()*0.3 - 0.15
+  });
+}
+
+// Ocean creatures
+const oceanCreatures = [];
+for(let i=0; i<60; i++){
+  oceanCreatures.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height*0.5 + canvas.height*0.1,
+    emoji: ['🐠','🐬','🐟','🐢','🦀'][Math.floor(Math.random()*5)],
+    speedX: Math.random()*1 + 0.5,
+    speedY: Math.random()*0.3 - 0.15
+  });
+}
+
+function drawScene(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // Sand
+  ctx.fillStyle = '#fff5cc';
+  ctx.fillRect(0, canvas.height*0.65, canvas.width, canvas.height*0.35);
+
+  // Water
+  ctx.fillStyle = '#66ccff';
+  ctx.fillRect(0, canvas.height*0.1, canvas.width, canvas.height*0.55);
+
+  // Sand creatures
+  sandCreatures.forEach(c=>{
+    ctx.font='24px serif';
+    ctx.fillText(c.emoji, c.x, c.y);
+    c.x += c.speedX;
+    if(c.x>canvas.width) c.x=0;
+    if(c.x<0) c.x=canvas.width;
+  });
+
+  // Ocean creatures
+  oceanCreatures.forEach(c=>{
+    ctx.font='28px serif';
+    ctx.fillText(c.emoji, c.x, c.y);
+    c.x += c.speedX;
+    c.y += c.speedY;
+    if(c.x>canvas.width) c.x=0;
+    if(c.x<0) c.x=canvas.width;
+    if(c.y>canvas.height*0.65) c.y=canvas.height*0.1;
+    if(c.y<canvas.height*0.1) c.y=canvas.height*0.65;
+  });
+
+  requestAnimationFrame(drawScene);
+}
+
+drawScene();
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
 </body>
 </html>
