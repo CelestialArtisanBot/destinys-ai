@@ -1,0 +1,115 @@
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(to bottom, #87CEFA, #00BFFF 40%, #1E90FF 80%);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  color: #fff;
+}
+
+/* Streaming numbers */
+.stream {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  font-family: monospace;
+  font-size: 18px;
+  color: #39ff14;
+  background: rgba(0,0,0,0.3);
+  padding: 4px 0;
+  letter-spacing: 2px;
+}
+
+/* Floating animals */
+.floating {
+  position: absolute;
+  font-size: 2.5rem;
+  animation: float 10s infinite linear;
+  opacity: 0.9;
+}
+.dolphin { top: 15%; left: 10%; animation-delay: 0s; }
+.turtle { top: 40%; left: 80%; animation-delay: 2s; }
+.fish { top: 60%; left: 20%; animation-delay: 4s; }
+.clownfish { top: 75%; left: 70%; animation-delay: 6s; }
+
+@keyframes float {
+  from { transform: translateY(0) rotate(0deg); }
+  to { transform: translateY(-50px) rotate(15deg); }
+}
+
+/* Chat UI */
+#chat-container {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  width: 90%;
+  max-width: 600px;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 40px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+#chat-box {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 15px;
+}
+
+.message {
+  padding: 10px 15px;
+  border-radius: 20px;
+  margin: 8px 0;
+  max-width: 75%;
+  word-wrap: break-word;
+}
+
+.user {
+  background: #ffe4b5;
+  color: #333;
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+.bot {
+  background: #20b2aa;
+  color: white;
+  align-self: flex-start;
+}
+
+#input-container {
+  display: flex;
+  gap: 10px;
+}
+
+#user-input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+}
+
+#send-btn {
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: none;
+  background: #39ff14;
+  color: #000;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+#send-btn:hover {
+  background: #32cd32;
+}
