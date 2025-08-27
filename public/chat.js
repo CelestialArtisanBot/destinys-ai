@@ -1,100 +1,45 @@
-const chatMessages = document.getElementById("chat-messages");
+const chatBox = document.getElementById("chat-box");
 const userInput = document.getElementById("user-input");
-const sendButton = document.getElementById("send-button");
-const typingIndicator = document.getElementById("typing-indicator");
+const sendBtn = document.getElementById("send-btn");
+const stream = document.getElementById("stream");
 
-let chatHistory = [{ role: "assistant", content: "Hello! I'm Destiny Nicole's AI. How can I assist you today?" }];
-let isProcessing = false;
+// Function to add messages
+function addMessage(text, sender) {
+  const msg = document.createElement("div");
+  msg.classList.add("message", sender);
+  msg.innerText = text;
+  chatBox.appendChild(msg);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
 
-userInput.addEventListener("input", function() {
-  this.style.height = "auto";
-  this.style.height = this.scrollHeight + "px";
-});
+// Fake AI response
+async function getAIResponse(userMsg) {
+  // Simulate "thinking"
+  await new Promise(res => setTimeout(res, 1000));
+  return `🌴 AI Ocean says: "${userMsg}" echoed back to you.`;
+}
 
-userInput.addEventListener("keydown", function(e) {
-  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-});
-sendButton.addEventListener("click", sendMessage);
-
+// Send message
 async function sendMessage() {
-  const msg = userInput.value.trim();
-  if (!msg || isProcessing) return;
-
-  isProcessing = true;
-  userInput.disabled = true;
-  sendButton.disabled = true;
-
-  addMessage("user", msg);
-  chatHistory.push({ role: "user", content: msg });
+  const text = userInput.value.trim();
+  if (!text) return;
+  addMessage(text, "user");
   userInput.value = "";
-  userInput.style.height = "auto";
-  typingIndicator.classList.add("visible");
 
-  try {
-    const assistantEl = document.createElement("div");
-    assistantEl.className = "message assistant-message";
-    assistantEl.innerHTML = "<p></p><span class='cursor'>█</span>";
-    chatMessages.appendChild(assistantEl);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: chatHistory })
-    });
-
-    if (!response.ok) throw new Error("Failed to get response");
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let responseText = "";
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      const chunk = decoder.decode(value, { stream: true });
-      const lines = chunk.split("\n");
-
-      for (const line of lines) {
-        try {
-          const jsonData = JSON.parse(line);
-          if (jsonData.response) {
-            await appendNeonText(assistantEl.querySelector("p"), jsonData.response);
-            responseText += jsonData.response;
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-          }
-        } catch (e) { console.error(e); }
-      }
-    }
-
-    chatHistory.push({ role: "assistant", content: responseText });
-  } catch (err) {
-    console.error(err);
-    addMessage("assistant", "Oops! Something went wrong.");
-  } finally {
-    typingIndicator.classList.remove("visible");
-    isProcessing = false;
-    userInput.disabled = false;
-    sendButton.disabled = false;
-    userInput.focus();
-  }
+  const response = await getAIResponse(text);
+  addMessage(response, "bot");
 }
 
-function addMessage(role, content) {
-  const el = document.createElement("div");
-  el.className = `message ${role}-message`;
-  el.innerHTML = `<p>${content}</p>`;
-  chatMessages.appendChild(el);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-}
+sendBtn.addEventListener("click", sendMessage);
+userInput.addEventListener("keypress", e => {
+  if (e.key === "Enter") sendMessage();
+});
 
-async function appendNeonText(container, text) {
-  for (const char of text) {
-    container.innerHTML += `<span class="neon-char">${char}</span>`;
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    await delay(20);
-  }
+// Streaming numbers effect
+function randomBinaryStream() {
+  const line = Array.from({length: 50}, () =>
+    Math.random() > 0.5 ? "1" : "0"
+  ).join("");
+  stream.innerText = line;
 }
-
-function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+setInterval(randomBinaryStream, 200);
