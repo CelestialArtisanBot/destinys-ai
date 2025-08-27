@@ -16,7 +16,7 @@ function addMessage(text, sender) {
 async function getAIResponse(userMsg) {
   // Simulate "thinking"
   await new Promise(res => setTimeout(res, 1000));
-  return `🌴 AI Ocean says: "${userMsg}" echoed back to you.`;
+  return `🌴 Destiny's AI says..: "${userMsg}" echoed back to you.`;
 }
 
 // Send message
